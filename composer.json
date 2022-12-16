@@ -1,0 +1,30 @@
+{
+    "name": "bengr/support",
+    "description": "Bengr support package for providing some repetetive and key functionalitis for project",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "matejkrenek",
+            "email": "mate23.krenek@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bengr\\Support\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "orchestra/testbench": "^7.13"
+    },
+    "require": {
+        "spatie/laravel-package-tools": "^1.13"
+    }
+}
