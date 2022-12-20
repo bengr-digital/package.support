@@ -10,13 +10,18 @@
         }
     ],
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "Bengr\\Support\\": "src/"
         }
     },
     "extra": {
         "laravel": {
-
+            "providers": [
+                "Bengr\\Support\\SupportServiceProvider"
+            ]
         }
     },
     "minimum-stability": "dev",
