@@ -26,6 +26,8 @@ class Response implements Responsable
 
     protected bool $resource_is_collection = false;
 
+    protected $redirect = null;
+
     final public function __construct($content = '')
     {
         $this->content = $content;
@@ -54,6 +56,10 @@ class Response implements Responsable
 
         if ($this->view_name) {
             return view($this->view_name, $this->view_data);
+        }
+
+        if ($this->redirect) {
+            return redirect($this->redirect);
         }
 
         return response($this->content, $this->status, $this->headers);
@@ -109,6 +115,13 @@ class Response implements Responsable
         $this->resource_class = $class;
         $this->resource_data = $data;
         $this->resource_is_collection = true;
+
+        return $this;
+    }
+
+    public function redirect($redirect): self
+    {
+        $this->redirect = $redirect;
 
         return $this;
     }

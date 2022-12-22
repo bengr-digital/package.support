@@ -2,6 +2,8 @@
 
 namespace Bengr\Support;
 
+use Bengr\Support\Rules\ValidOldPassword;
+use Illuminate\Validation\Rule;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -11,5 +13,10 @@ class SupportServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('bengr-support');
+    }
+
+    public function packageBooted()
+    {
+        Rule::macro('validOldPassword', fn ($guard = null) => new ValidOldPassword($guard));
     }
 }
