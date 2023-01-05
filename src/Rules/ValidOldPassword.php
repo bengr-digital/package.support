@@ -10,6 +10,8 @@ class ValidOldPassword implements Rule
 {
     use CustomRule;
 
+    protected ?string $guard = null;
+
     public function __construct($guard = null)
     {
         $this->guard = $guard;
@@ -18,7 +20,7 @@ class ValidOldPassword implements Rule
     public function handle($attribute, $value)
     {
         if (!auth($this->guard)->user() || !Hash::check($value, auth($this->guard)->user()->password)) {
-            $this->setError('Incorrect :attribute');
+            $this->setError(__('validation.incorrect'));
         }
     }
 }
