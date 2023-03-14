@@ -14,13 +14,18 @@ class BengrFileMax implements Rule
 
     public function __construct(int $size)
     {
-        $this->size = $size * 1024;
+        $this->size = $size;
+    }
+
+    public function getSize()
+    {
+        return $this->size;
     }
 
     public function handle($attribute, $value)
     {
         if ($value['temporary'] && Storage::disk('local')->exists($value['path'])) {
-            if (Storage::disk('local')->size($value['path']) > $this->size) {
+            if (Storage::disk('local')->size($value['path']) > ($this->getSize() * 1024)) {
                 $this->setError(__('validation.bengr_file_max'));
             }
         }
