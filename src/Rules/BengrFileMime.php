@@ -27,7 +27,7 @@ class BengrFileMime implements Rule
     {
         if ($value['temporary'] && Storage::disk('local')->exists($value['path'])) {
 
-            if (!in_array(Str::of($value['path'])->explode('.')->last(), $this->getMimes())) {
+            if (!in_array(Str::of($value['path'])->lower()->explode('.')->last(), $this->getMimes())) {
                 $this->setError(__('validation.bengr_file_mimes'));
             }
         }
