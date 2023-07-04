@@ -3,6 +3,7 @@
 namespace Bengr\Support\Rules;
 
 use Bengr\Support\Rules\Concerns\CustomRule;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,14 +13,17 @@ class ValidOldPassword implements Rule
 
     protected ?string $guard = null;
 
-    public function __construct($guard = null)
+    protected ?Authenticatable $user = null;
+
+    public function __construct($guard = null, Authenticatable $user = null)
     {
         $this->guard = $guard;
+        $this->user = $user ?? auth($this->guard)->user();
     }
 
     public function handle($attribute, $value)
     {
-        if (!auth($this->guard)->user() || !Hash::check($value, auth($this->guard)->user()->password)) {
+        if (!$this->user || !Hash::check($value, $this->user->password)) {
             $this->setError(__('validation.incorrect'));
         }
     }

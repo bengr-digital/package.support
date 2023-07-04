@@ -51,18 +51,36 @@ class CSVExporter
 
     public function stream()
     {
+        return Response::stream($this->getCallback(), 200, $this->getHeaders());
+    }
+
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    public function getRecords(): Collection
+    {
+        return $this->records;
+    }
+
+    public function getHeaders(): array
+    {
         $filename = $this->getFilename();
 
-        $headers = array(
+        return [
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$filename",
             "Access-Control-Expose-Headers" => "Content-Disposition",
             "Pragma"              => "no-cache",
             "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
             "Expires"             => "0"
-        );
+        ];
+    }
 
-        $callback = function () {
+    public function getCallback(): callable
+    {
+        return function () {
             $file = fopen('php://output', 'w');
             fputcsv($file, $this->getColumns());
 
@@ -79,18 +97,6 @@ class CSVExporter
 
             fclose($file);
         };
-
-        return Response::stream($callback, 200, $headers);
-    }
-
-    public function getColumns(): array
-    {
-        return $this->columns;
-    }
-
-    public function getRecords(): Collection
-    {
-        return $this->records;
     }
 
     public function getFilename(): string
