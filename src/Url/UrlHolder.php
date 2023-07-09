@@ -74,8 +74,7 @@ class UrlHolder
             $conditions = ['subClass' => $conditions];
         }
 
-
-        $properties = (new ReflectionClass($this->instance))->getProperties();
+        $properties = (new ReflectionClass($this->instance))->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return match (true) {
             !empty($conditions['subClass']) => array_filter($properties, fn ($p) => $this->isPropertySubClassOf($p, $conditions['subClass'])),
