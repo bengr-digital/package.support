@@ -98,6 +98,13 @@ class UrlHolder
         $this->parameters[$name] = $value;
     }
 
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
     public function parseUrl(string $url)
     {
         $url = trim($url, '/');
@@ -147,7 +154,7 @@ class UrlHolder
         });
     }
 
-    protected function compileRoute(): CompiledRoute
+    public function compileRoute(): CompiledRoute
     {
         if (!$this->compiled) {
             $this->compiled = $this->toSymfonyRoute()->compile();
@@ -173,6 +180,7 @@ class UrlHolder
     {
         $this->instance = $instance;
         $parameters = $this->getParameters();
+        $counter = 0;
 
         foreach ($this->getSignatureProperties(['subClass' => UrlRoutable::class]) as $property) {
             if (!$parameterName = static::getParameterName($property->getName(), $parameters)) {
@@ -208,8 +216,14 @@ class UrlHolder
             } elseif (!$model = $instance->{$routeBindingMethod}($parameterValue, $this->getBindingFieldFor($parameterName))) {
                 throw (new ModelNotFoundException)->setModel(get_class($instance), [$parameterValue]);
             }
+
             $this->setParameter($parameterName, $model);
             $this->instance->$parameterName = $model;
+            $counter++;
+        }
+
+        if (!$counter == count($parameters)) {
+            throw (new ModelNotFoundException);
         }
 
         return $this->instance;
